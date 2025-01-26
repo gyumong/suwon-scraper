@@ -1,0 +1,8 @@
+{
+  "name": "playwright-lambda-layer",
+  "version": "1.0.0",
+  "dependencies": {
+    "playwright-aws-lambda": "^0.11.0",
+    "playwright-core": "^1.41.0"
+  }
+}
