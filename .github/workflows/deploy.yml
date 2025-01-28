@@ -7,9 +7,10 @@ on:
 env:
   AWS_REGION: ap-northeast-2
   ECR_REPOSITORY: suwon-scraper
-  ECS_SERVICE: suwon-scraper2
+  ECS_SERVICE: suwon-scraper2        
   ECS_CLUSTER: suwon-scraper
   CONTAINER_NAME: suwon-scraper
+  TASK_DEFINITION_FAMILY: suwon-scraper2  
 
 jobs:
   deploy:
@@ -50,7 +51,7 @@ jobs:
     - name: Deploy Amazon ECS task definition
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
-        task-definition: task-definition.json
-        service: suwon-scraper-service2
-        cluster: suwon-scraper
-        wait-for-service-stability: true 
+        task-definition: ${{ steps.task-def.outputs.task-definition }}  # 수정된 task-definition 사용
+        service: ${{ env.ECS_SERVICE }}
+        cluster: ${{ env.ECS_CLUSTER }}
+        wait-for-service-stability: true

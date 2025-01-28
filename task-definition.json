@@ -5,7 +5,6 @@
   "cpu": "1024",
   "memory": "2048",
   "executionRoleArn": "arn:aws:iam::445567115863:role/ecsTaskExecutionRole",  
-  "taskRoleArn": "arn:aws:iam::445567115863:role/ecsTaskRole",               
   "containerDefinitions": [
     {
       "name": "suwon-scraper",
