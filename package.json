@@ -10,10 +10,10 @@
   },
   "dependencies": {
     "express": "^4.18.2",
-    "playwright-core": "^1.41.0",
+    "playwright-core": "1.41.0",
     "cors": "^2.8.5",
-    "@playwright/test": "^1.41.2",
-    "playwright": "^1.41.2"
+    "@playwright/test": "1.41.2",
+    "playwright": "1.41.2"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.130",
