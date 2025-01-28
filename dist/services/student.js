@@ -17,7 +17,7 @@ async function scrapeStudent(page, username) {
         throw new Error(`Failed to fetch student info: ${response.status()}`);
     }
     const responseData = await response.json();
-    const studentInfo = responseData === null || responseData === void 0 ? void 0 : responseData.studentInfo;
+    const studentInfo = responseData?.studentInfo;
     if (!studentInfo) {
         throw new Error('No studentInfo found in response.');
     }
@@ -33,4 +33,3 @@ async function scrapeStudent(page, username) {
         admissionYear: studentInfo.entYear,
     };
 }
-//# sourceMappingURL=student.js.map

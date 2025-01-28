@@ -50,4 +50,3 @@ function processGradeData(gradeData) {
     };
     return { semesters, total };
 }
-//# sourceMappingURL=credit.js.map

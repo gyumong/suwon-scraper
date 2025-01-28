@@ -1,4 +1,5 @@
-FROM mcr.microsoft.com/playwright:v1.50.0-focal
+# 최신 안정 버전 사용
+FROM mcr.microsoft.com/playwright:v1.41.2-focal
 
 WORKDIR /app
 

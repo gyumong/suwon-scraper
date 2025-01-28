@@ -36,4 +36,3 @@ async function scrapeCourses(page, username) {
     }
     return courses;
 }
-//# sourceMappingURL=course.js.map

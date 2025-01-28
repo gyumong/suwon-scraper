@@ -9,4 +9,3 @@ exports.logger = {
         console.error(`[ERROR] ${message}`, error ? error : '');
     }
 };
-//# sourceMappingURL=logger.js.map

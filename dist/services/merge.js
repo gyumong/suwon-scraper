@@ -34,4 +34,3 @@ function mergeCreditCourse(creditData, courseData) {
         courses: Object.values(sem.courses),
     }));
 }
-//# sourceMappingURL=merge.js.map

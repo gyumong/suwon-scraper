@@ -24,7 +24,7 @@ app.post('/auth', async (req, res) => {
   let loginError = false;
 
   try {
-    const { username, pass .word } = req.body;
+    const { username, password } = req.body;
 
     if (!username || !password) {
       return res.status(400).json({ error: '학번/비밀번호가 필요합니다.' });
