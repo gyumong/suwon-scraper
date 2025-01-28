@@ -1,6 +1,6 @@
 import type { Page } from 'playwright-core';
 import type { Credit, ProcessedSemesterGrade, ProcessedTotalGrade } from '../types';
-
+import { logger } from '../utils/logger';
 export async function scrapeCredits(page: Page, username: string): Promise<{
   credits: Credit[];
   academicRecords: {
@@ -23,6 +23,12 @@ export async function scrapeCredits(page: Page, username: string): Promise<{
       data: { sno: username },
     }
   );
+  logger.info('Response status:', gradeResponse.status());
+  logger.info('Response data:', await gradeResponse.json());
+  if (!gradeResponse.ok()) {
+    logger.error('Failed to fetch grade info:', gradeResponse.status());
+    throw new Error(`Failed to fetch grade info: ${gradeResponse.status()}`);
+  }
 
   const gradeData = await gradeResponse.json();
   const credits: Credit[] = [];
@@ -40,6 +46,14 @@ export async function scrapeCredits(page: Page, username: string): Promise<{
       }
     );
 
+    logger.info('Response status:', response.status());
+    logger.info('Response data:', await response.json());
+    
+    if (!response.ok()) {
+      logger.error('Failed to fetch credit info:', response.status());
+      throw new Error(`Failed to fetch credit info: ${response.status()}`);
+    }
+
     const data = await response.json();
     const semesterCredits = (data.listSmrCretSumTabSubjt || []).map((entry: any) => ({
       courseCode: entry.subjtCd,
@@ -48,7 +62,6 @@ export async function scrapeCredits(page: Page, username: string): Promise<{
       grade: entry.cretGrade,
       semester: `${item.cretGainYear}-${item.cretSmrCd}`,
     }));
-
     credits.push(...semesterCredits);
   }
 

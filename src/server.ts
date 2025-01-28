@@ -84,6 +84,8 @@ app.post('/scrape', async (req, res) => {
   try {
     const { username, password } = req.body;
 
+    logger.info('Scraping request received UserId, Password:', { username, password });
+
     if (!username || !password) {
       return res.status(400).json({ error: '학번/비밀번호가 필요합니다.' });
     }

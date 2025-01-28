@@ -1,6 +1,6 @@
 import type { Page } from 'playwright-core';
 import type { Course } from '../types';
-
+import { logger } from '../utils/logger';
 export async function scrapeCourses(page: Page, username: string): Promise<Course[]> {
   const headers = {
     'Content-Type': 'application/json;charset=UTF-8',
@@ -17,6 +17,11 @@ export async function scrapeCourses(page: Page, username: string): Promise<Cours
       data: { sno: username },
     }
   );
+  logger.info('Response status:', response1.status());
+  if (!response1.ok()) {
+    logger.error('Failed to fetch course info:', response1.status());
+    throw new Error(`Failed to fetch course info: ${response1.status()}`);
+  }
 
   const data1 = await response1.json();
   const courses: Course[] = [];
@@ -33,6 +38,11 @@ export async function scrapeCourses(page: Page, username: string): Promise<Cours
         },
       }
     );
+    logger.info('Response status:', response2.status());
+    if (!response2.ok()) {
+      logger.error('Failed to fetch course info:', response2.status());
+      throw new Error(`Failed to fetch course info: ${response2.status()}`);
+    }
 
     const data2 = await response2.json();
     const semesterCourses = (data2.listAtlecApplDtaiTabSubjt || []).map((item: any) => ({
@@ -43,6 +53,7 @@ export async function scrapeCourses(page: Page, username: string): Promise<Cours
       subjectEstablishmentSemesterCode: info.subjtEstbSmrCd,
     }));
 
+    logger.info('Semester courses:', semesterCourses);
     courses.push(...semesterCourses);
   }
 
