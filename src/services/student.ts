@@ -1,5 +1,6 @@
 import type { Page } from 'playwright-core';
 import type { Student } from '../types';
+import { logger } from '../utils/logger';
 
 export async function scrapeStudent(page: Page, username: string): Promise<Student> {
   const headers = {
@@ -17,15 +18,21 @@ export async function scrapeStudent(page: Page, username: string): Promise<Stude
       data: { sno: username },
     }
   );
-
+  logger.info('Response status:', response.status());
   if (!response.ok()) {
+    logger.error('Failed to fetch student info:', response.status());
     throw new Error(`Failed to fetch student info: ${response.status()}`);
   }
 
   const responseData = await response.json();
+  logger.info('Response data structure:', {
+    hasStudentInfo: !!responseData?.studentInfo,
+    keys: Object.keys(responseData || {})
+  });
   const studentInfo = responseData?.studentInfo;
 
   if (!studentInfo) {
+    logger.error('No studentInfo found in response:', responseData);
     throw new Error('No studentInfo found in response.');
   }
 
