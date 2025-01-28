@@ -11,6 +11,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// 루트 경로 핸들러 추가
+app.get('/', (req, res) => {
+  res.status(200).send('OK');
+});
+
 // 로그인 확인용 엔드포인트
 app.post('/auth', async (req, res) => {
   let browser: Browser | null = null;
