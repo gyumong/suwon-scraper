@@ -9,7 +9,7 @@ env:
   ECR_REPOSITORY: suwon-scraper
   ECS_SERVICE: suwon-scraper2        
   ECS_CLUSTER: suwon-scraper
-  CONTAINER_NAME: suwon-scraper
+  CONTAINER_NAME: suwon-scraper2
   TASK_DEFINITION_FAMILY: suwon-scraper2  
 
 jobs:
