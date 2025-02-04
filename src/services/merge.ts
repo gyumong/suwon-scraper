@@ -42,13 +42,8 @@ export function mergeCreditCourse(creditDTOs: CreditDTO[], courseDTOs: CourseDTO
   }
 
   // 3. 학기별 그룹 데이터를 MergedSemesterDTO 배열로 변환
-  logger.info("courseDTOs", courseDTOs);
-  logger.info("creditDTOs", creditDTOs);
-  logger.info("semesterMap", semesterMap);
-  const result = Object.values(semesterMap).map(sem => ({
+  return Object.values(semesterMap).map(sem => ({
     semester: sem.semester,
     courses: Object.values(sem.courses),
   }));
-  logger.info("result", JSON.stringify(result, null, 2));
-  return result;
 }
