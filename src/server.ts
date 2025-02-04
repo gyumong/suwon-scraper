@@ -145,6 +145,10 @@ app.post("/scrape", async (req, res) => {
   }
 });
 
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   logger.info(`Server is running on port ${PORT}`);
