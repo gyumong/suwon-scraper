@@ -45,8 +45,10 @@ export function mergeCreditCourse(creditDTOs: CreditDTO[], courseDTOs: CourseDTO
   logger.info("courseDTOs", courseDTOs);
   logger.info("creditDTOs", creditDTOs);
   logger.info("semesterMap", semesterMap);
-  return Object.values(semesterMap).map(sem => ({
+  const result = Object.values(semesterMap).map(sem => ({
     semester: sem.semester,
     courses: Object.values(sem.courses),
   }));
+  logger.info("result", JSON.stringify(result, null, 2));
+  return result;
 }
