@@ -43,12 +43,10 @@ export async function scrapeCredits(
     const data = await response.json();
     const semesterCredits = (data.listSmrCretSumTabSubjt || []).map((entry: any) => ({
       ...entry,
-      cretGainYear: item.cretGainYear,
-      cretSmrCd: item.cretSmrCd,
-      semester: `${item.cretGainYear}-${item.cretSmrCd}`,
+      cretGainYear: item.cretGainYear, // 상위 항목에서 가져옴
+      cretSmrCd: item.cretSmrCd, // 상위 항목에서 가져옴
     }));
     creditDTOs.push(...semesterCredits);
   }
-
   return { creditDTOs, gradeResponse: gradeData as GradeResponseDTO };
 }
