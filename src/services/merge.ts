@@ -3,6 +3,7 @@
 import type { CreditDTO } from "../dtos/CreditDTO";
 import type { CourseDTO } from "../dtos/CourseDTO";
 import type { MergedSemesterDTO, MergedSemesterCourseDTO } from "../dtos/MergedSemesterDTO";
+import { logger } from "../utils/logger";
 
 /**
  * CreditDTO와 CourseDTO 데이터를 학기별로 병합하여 MergedSemesterDTO 배열로 반환한다.
@@ -41,6 +42,9 @@ export function mergeCreditCourse(creditDTOs: CreditDTO[], courseDTOs: CourseDTO
   }
 
   // 3. 학기별 그룹 데이터를 MergedSemesterDTO 배열로 변환
+  logger.info("courseDTOs", courseDTOs);
+  logger.info("creditDTOs", creditDTOs);
+  logger.info("semesterMap", semesterMap);
   return Object.values(semesterMap).map(sem => ({
     semester: sem.semester,
     courses: Object.values(sem.courses),
