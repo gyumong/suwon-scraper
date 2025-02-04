@@ -109,6 +109,10 @@ app.post("/scrape", async (req, res) => {
     await frame.click("button.mainbtn_login");
     await page.waitForTimeout(3000);
 
+    // 정보시스템으로 명시적 이동 추가 (SSO 처리를 위해)
+    await page.goto("https://info.suwon.ac.kr/");
+    await page.waitForTimeout(3000);
+
     if (!page) throw new Error("페이지를 찾을 수 없습니다.");
     // 병렬 크롤링: 학생 정보, 수강 내역, 성적 정보
     const [student, courses, creditResult] = await Promise.all([
