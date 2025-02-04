@@ -120,10 +120,10 @@ app.post("/scrape", async (req, res) => {
     if (loginError) {
       throw new Error("아이디나 비밀번호가 일치하지 않습니다.\n학교 홈페이지에서 확인해주세요.");
     }
-
+    logger.info("학사시스템 페이지 이동 시작");
     // 로그인 성공한 경우 → 학사시스템 페이지 이동
     await page.goto("https://info.suwon.ac.kr/sso_security_check", { waitUntil: "domcontentloaded" });
-
+    logger.info("학사시스템 페이지 이동 완료");
     // 병렬 크롤링: 학생 정보, 수강 내역, 성적 정보
     const [student, courses, creditResult] = await Promise.all([
       scrapeStudent(page, username),
