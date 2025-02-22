@@ -45,16 +45,28 @@ app.post("/auth", async (req, res) => {
 
     await withBrowser(async (page: Page) => {
       await page.goto("https://portal.suwon.ac.kr/enview/index.html");
+
       const frame = page.frame({ name: "mainFrame" });
       if (!frame) throw new Error("mainFrame을 찾을 수 없습니다.");
 
       let loginError = false;
+      let accountLocked = false;
       page.on("dialog", async dialog => {
-        logger.info("Dialog message:", dialog.message());
-        if (dialog.message().includes("비밀번호를 잘못 입력")) {
-          loginError = true;
+        if (dialog.type() !== "alert") {
+          await dialog.dismiss();
+          return;
         }
-        await dialog.dismiss();
+        const msg = dialog.message();
+        logger.info("Dialog message:", msg);
+        if (msg.includes("연속 5회 잘못 입력하셨습니다")) {
+          accountLocked = true;
+          await dialog.dismiss();
+        } else if (msg.includes("아이디 또는 비밀번호를 잘못 입력하셨습니다")) {
+          loginError = true;
+          await dialog.dismiss();
+        } else {
+          await dialog.dismiss();
+        }
       });
 
       await frame.fill('input[name="userId"]', username);
@@ -64,6 +76,9 @@ app.post("/auth", async (req, res) => {
 
       if (loginError) {
         throw new Error("아이디나 비밀번호가 일치하지 않습니다.\n학교 홈페이지에서 확인해주세요.");
+      }
+      if (accountLocked) {
+        throw new Error("계정이 잠겼습니다. 포털사이트로 돌아가서 학번/사번 찾기 및 비밀번호 재발급을 진행해주세요.");
       }
     });
 
@@ -87,20 +102,6 @@ app.post("/scrape", async (req, res) => {
     }
 
     const result = await withBrowser(async (page: Page) => {
-      let loginError = false;
-      page.on("dialog", async dialog => {
-        if (dialog.type() === "alert") {
-          const msg = dialog.message();
-          if (msg.includes("아이디 또는 비밀번호를 잘못 입력하셨습니다")) {
-            loginError = true;
-            await dialog.dismiss();
-            return;
-          } else {
-            await dialog.dismiss();
-          }
-        }
-      });
-
       await page.goto("https://portal.suwon.ac.kr/enview/index.html", {
         waitUntil: "networkidle",
         timeout: 60000,
@@ -113,10 +114,6 @@ app.post("/scrape", async (req, res) => {
       await frame.fill('input[name="pwd"]', password);
       await frame.click("button.mainbtn_login");
       await page.waitForTimeout(3000);
-
-      if (loginError) {
-        throw new Error("아이디나 비밀번호가 일치하지 않습니다.\n학교 홈페이지에서 확인해주세요.");
-      }
 
       logger.info("학사시스템 페이지 이동 시작");
       await page.goto("https://info.suwon.ac.kr/sso_security_check", { waitUntil: "domcontentloaded" });
