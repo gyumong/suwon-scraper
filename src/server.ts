@@ -102,6 +102,26 @@ app.post("/scrape", async (req, res) => {
     }
 
     const result = await withBrowser(async (page: Page) => {
+      let loginError = false;
+      let accountLocked = false;
+      page.on("dialog", async dialog => {
+        if (dialog.type() !== "alert") {
+          await dialog.dismiss();
+          return;
+        }
+        const msg = dialog.message();
+        logger.info("Dialog message:", msg);
+        if (msg.includes("연속 5회 잘못 입력하셨습니다")) {
+          accountLocked = true;
+          await dialog.dismiss();
+        } else if (msg.includes("아이디 또는 비밀번호를 잘못 입력하셨습니다")) {
+          loginError = true;
+          await dialog.dismiss();
+        } else {
+          await dialog.dismiss();
+        }
+      });
+
       await page.goto("https://portal.suwon.ac.kr/enview/index.html", {
         waitUntil: "networkidle",
         timeout: 60000,
@@ -114,6 +134,17 @@ app.post("/scrape", async (req, res) => {
       await frame.fill('input[name="pwd"]', password);
       await frame.click("button.mainbtn_login");
       await page.waitForTimeout(3000);
+
+      if (loginError) {
+        return res
+          .status(401)
+          .json({ error: "아이디나 비밀번호가 일치하지 않습니다.\n학교 홈페이지에서 확인해주세요." });
+      }
+      if (accountLocked) {
+        return res
+          .status(423)
+          .json({ error: "계정이 잠겼습니다. 포털사이트로 돌아가서 학번/사번 찾기 및 비밀번호 재발급을 진행해주세요" });
+      }
 
       logger.info("학사시스템 페이지 이동 시작");
       await page.goto("https://info.suwon.ac.kr/sso_security_check", { waitUntil: "domcontentloaded" });
