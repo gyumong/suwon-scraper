@@ -136,14 +136,10 @@ app.post("/scrape", async (req, res) => {
       await page.waitForTimeout(3000);
 
       if (loginError) {
-        return res
-          .status(401)
-          .json({ error: "아이디나 비밀번호가 일치하지 않습니다.\n학교 홈페이지에서 확인해주세요." });
+        throw new Error("LOGIN_ERROR");
       }
       if (accountLocked) {
-        return res
-          .status(423)
-          .json({ error: "계정이 잠겼습니다. 포털사이트로 돌아가서 학번/사번 찾기 및 비밀번호 재발급을 진행해주세요" });
+        throw new Error("ACCOUNT_LOCKED");
       }
 
       logger.info("학사시스템 페이지 이동 시작");
@@ -168,7 +164,15 @@ app.post("/scrape", async (req, res) => {
     res.json(result);
   } catch (error: any) {
     logger.error("Scraping failed:", error);
-    res.status(500).json({ error: error.message });
+    if (error.message === "LOGIN_ERROR") {
+      return res.status(401).json({ error: "아이디나 비밀번호가 일치하지 않습니다.\n학교 홈페이지에서 확인해주세요." });
+    } else if (error.message === "ACCOUNT_LOCKED") {
+      return res
+        .status(423)
+        .json({ error: "계정이 잠겼습니다. 포털사이트로 돌아가서 학번/사번 찾기 및 비밀번호 재발급을 진행해주세요" });
+    } else {
+      res.status(500).json({ error: error.message });
+    }
   }
 });
 
