@@ -36,11 +36,13 @@ export async function scrapeCredits(
       },
     });
     logger.info("Credit detail response status:", response.status());
+    const data = await response.json();
+
     if (!response.ok()) {
+      logger.error("Failed to fetch credit", data);
       logger.error("Failed to fetch detailed credit info. Status:", response.status());
       throw new Error(`Failed to fetch credit detail info: ${response.status()}`);
     }
-    const data = await response.json();
     const semesterCredits = (data.listSmrCretSumTabSubjt || []).map((entry: any) => ({
       ...entry,
       cretGainYear: item.cretGainYear, // 상위 항목에서 가져옴

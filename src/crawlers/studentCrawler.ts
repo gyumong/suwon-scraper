@@ -24,6 +24,7 @@ export async function scrapeStudent(page: Page, username: string): Promise<Stude
   logger.info("Student response data keys:", Object.keys(responseData || {}));
   const studentInfo = responseData?.studentInfo;
   if (!studentInfo) {
+    logger.error("studentInfo", responseData);
     logger.error("No studentInfo found in response.");
     throw new Error("No studentInfo found in response.");
   }
