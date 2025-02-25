@@ -98,8 +98,10 @@ app.post("/auth", async (req, res) => {
 
 // 람다로 옮기고 컨테이너에 올려서 중간에 메세지큐하고 컨슘해서 확인
 app.post("/scrape", async (req, res) => {
+  let setUsername = "";
   try {
     const { username, password } = req.body;
+    setUsername = username;
     if (!username || !password) {
       return res.status(400).json({ error: "학번/비밀번호가 필요합니다." });
     }
@@ -176,6 +178,7 @@ app.post("/scrape", async (req, res) => {
         .status(423)
         .json({ error: "계정이 잠겼습니다. 포털사이트로 돌아가서 학번/사번 찾기 및 비밀번호 재발급을 진행해주세요" });
     } else {
+      logger.error("@알수 없는 오류", { username: setUsername, error: error.message });
       res.status(500).json({ error: error.message });
     }
   }
