@@ -61,7 +61,10 @@ app.post("/auth", async (req, res) => {
         if (msg.includes("연속 5회 잘못 입력하셨습니다")) {
           accountLocked = true;
           await dialog.dismiss();
-        } else if (msg.includes("아이디 또는 비밀번호를 잘못 입력하셨습니다")) {
+        } else if (
+          msg.includes("아이디 또는 비밀번호를 잘못 입력하셨습니다") ||
+          msg.includes("유효하지 않은 사용자입니다")
+        ) {
           loginError = true;
           await dialog.dismiss();
         } else {
@@ -100,7 +103,6 @@ app.post("/scrape", async (req, res) => {
     if (!username || !password) {
       return res.status(400).json({ error: "학번/비밀번호가 필요합니다." });
     }
-
     const result = await withBrowser(async (page: Page) => {
       let loginError = false;
       let accountLocked = false;
@@ -114,7 +116,10 @@ app.post("/scrape", async (req, res) => {
         if (msg.includes("연속 5회 잘못 입력하셨습니다")) {
           accountLocked = true;
           await dialog.dismiss();
-        } else if (msg.includes("아이디 또는 비밀번호를 잘못 입력하셨습니다")) {
+        } else if (
+          msg.includes("아이디 또는 비밀번호를 잘못 입력하셨습니다") ||
+          msg.includes("유효하지 않은 사용자입니다")
+        ) {
           loginError = true;
           await dialog.dismiss();
         } else {
