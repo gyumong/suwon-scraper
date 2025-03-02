@@ -25,6 +25,7 @@ export async function scrapeCredits(
     throw new Error(`Failed to fetch grade info: ${gradeResponse.status()}`);
   }
   const gradeData = await gradeResponse.json();
+  logger.info(`Grade data received:${username}`, JSON.stringify(gradeData, null, 2));
   const creditDTOs: CreditDTO[] = [];
   for (const item of gradeData.listSmrCretSumTabYearSmr || []) {
     const response = await page.request.post("https://info.suwon.ac.kr/cretBas/listSmrCretSumTabSubjt.do", {

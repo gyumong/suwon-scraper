@@ -6,7 +6,7 @@ export interface CreditDTO {
   subjtNm: string; // Subject name
   estbDpmjNm: string; // Department name offering the subject
   facDvnm: string; // Professor name (or faculty division name)
-  gainPoint: number; // Earned credits
+  gainPoint?: number; // Earned credits
   gainPont: number; // Original score (if applicable)
   subjtCd: string; // Subject code
   cretSmrNm: string; // Semester name (e.g., "2024-2학기")
