@@ -15,18 +15,18 @@ export async function scrapeStudent(page: Page, username: string): Promise<Stude
     headers: STUDENT_HEADERS,
     data: { sno: username },
   });
-  logger.info("Student response status:", response.status());
+  logger.info(`Student response status:${username}`, response.status());
   if (!response.ok()) {
     logger.error("Failed to fetch student info. Status:", response.status());
     throw new Error(`Failed to fetch student info: ${response.status()}`);
   }
   const responseData = await response.json();
-  logger.info("Student response data keys:", Object.keys(responseData || {}));
+  logger.info(`Student response data keys:${username}`, Object.keys(responseData || {}));
   const studentInfo = responseData?.studentInfo;
   if (!studentInfo) {
-    logger.error("studentInfo", responseData);
-    logger.error("No studentInfo found in response.");
-    throw new Error("No studentInfo found in response.");
+    logger.error(`studentInfo:${username}`, responseData);
+    logger.error(`No studentInfo found in response:${username}`);
+    throw new Error(`No studentInfo found in response:${username}`);
   }
   return studentInfo as StudentDTO;
 }

@@ -31,11 +31,13 @@ export async function scrapeCourses(page: Page, username: string): Promise<Cours
         subjtEstbSmrCd: info.subjtEstbSmrCd,
       },
     });
+    logger.info(`Course details response status:${username}`, response2.status());
     if (!response2.ok()) {
-      logger.error("Failed to fetch course details. Status:", response2.status());
+      logger.error(`Failed to fetch course details:${username}`, response2.status());
       throw new Error(`Failed to fetch course details: ${response2.status()}`);
     }
     const data2 = await response2.json();
+    logger.info(`Course details:${username}`, data2);
     detailedDTOs.push(...(data2.listAtlecApplDtaiTabSubjt || []));
   }
   return detailedDTOs;

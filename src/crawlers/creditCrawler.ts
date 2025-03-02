@@ -19,9 +19,9 @@ export async function scrapeCredits(
     headers: CREDIT_HEADERS,
     data: { sno: username },
   });
-  logger.info("Grade response status:", gradeResponse.status());
+  logger.info(`Grade response status:${username}`, gradeResponse.status());
   if (!gradeResponse.ok()) {
-    logger.error("Failed to fetch grade info. Status:", gradeResponse.status());
+    logger.error(`Failed to fetch grade info:${username}`, gradeResponse.status());
     throw new Error(`Failed to fetch grade info: ${gradeResponse.status()}`);
   }
   const gradeData = await gradeResponse.json();
@@ -36,13 +36,13 @@ export async function scrapeCredits(
         cretSmrCd: item.cretSmrCd,
       },
     });
-    logger.info("Credit detail response status:", response.status());
+    logger.info(`Credit detail response status:${username}`, response.status());
     const data = await response.json();
-
+    logger.info(`Credit detail data received:${username}`, JSON.stringify(data, null, 2));
     if (!response.ok()) {
-      logger.error("Failed to fetch credit", data);
-      logger.error("Failed to fetch detailed credit info. Status:", response.status());
-      throw new Error(`Failed to fetch credit detail info: ${response.status()}`);
+      logger.error(`Failed to fetch credit:${username}`, data);
+      logger.error(`Failed to fetch detailed credit info:${username}`, response.status());
+      throw new Error(`Failed to fetch credit detail info:${username} ${response.status()}`);
     }
     const semesterCredits = (data.listSmrCretSumTabSubjt || []).map((entry: any) => ({
       ...entry,
