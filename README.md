@@ -1,6 +1,7 @@
 # Suwon Scraper
 
 suwon-scraper는 수원대학교 포털 및 학사 시스템 데이터를 크롤링하여 학생의 기본정보, 수강 내역, 성적 정보를 수집하고 가공하는 Node.js 기반의 웹 크롤러입니다. AWS ECS에서 Docker를 이용해 컨테이너로 배포하여 실행할 수 있습니다.
+
 suwon-scraper는 GitHub Actions를 활용하여 Amazon ECS에 자동 배포됩니다.
 
 ### 주요기능
