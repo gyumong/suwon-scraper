@@ -15,4 +15,6 @@ export interface CreditDTO {
   cretSmrCd: string; // Semester code (e.g., "10", "15", "20", or "25")
   cltTerrCd?: number; // Optional: normalized area code
   cltTerrNm?: string; // Optional: area name
+  cretDelCd?: string; // Optional: retake deletion code
+  cretDelNm?: string; // Optional: retake deletion name
 }
