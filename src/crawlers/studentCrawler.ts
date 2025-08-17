@@ -28,5 +28,22 @@ export async function scrapeStudent(page: Page, username: string): Promise<Stude
     logger.error(`No studentInfo found in response:${username}`);
     throw new Error(`No studentInfo found in response:${username}`);
   }
-  return studentInfo as StudentDTO;
+  return {
+    sno: studentInfo.sno,
+    studNm: studentInfo.studNm,
+    univCd: studentInfo.univCd,
+    univNm: studentInfo.univNm,
+    dpmjCd: studentInfo.dpmjCd,
+    dpmjNm: studentInfo.dpmjNm,
+    mjorCd: studentInfo.mjorCd,
+    mjorNm: studentInfo.mjorNm,
+    the2MjorCd: studentInfo.the2MjorCd,
+    the2MjorNm: studentInfo.the2MjorNm,
+    enscYear: studentInfo.enscYear,
+    enscSmrCd: studentInfo.enscSmrCd,
+    scrgStatNm: studentInfo.scrgStatNm,
+    studGrde: studentInfo.studGrde,
+    enscDvcd: studentInfo.enscDvcd,
+    facSmrCnt: parseInt(studentInfo.facSmrCnt) || 0,
+  };
 }
